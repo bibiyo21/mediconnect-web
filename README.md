@@ -1,5 +1,11 @@
 # mediconnect-web
 
-Next.js public, SEO-oriented MediConnect website: doctor, clinic and specialty pages. Holds no patient data.
+Next.js public, SEO-oriented MediConnect website. Holds no patient data.
 
-Not scaffolded yet: built in Phase 1, increment 9. Specification: [mediconnect-docs](https://github.com/bibiyo21/mediconnect-docs).
+```bash
+pnpm install
+pnpm dev                       # http://localhost:3000
+pnpm test && pnpm typecheck && pnpm lint && pnpm build
+```
+
+Phase 1 is a shell: layout, home page and draft legal pages. Doctor, clinic and specialty pages arrive with search (Phase 3). Security headers are set in `next.config.ts`. Specification: [mediconnect-docs](https://github.com/bibiyo21/mediconnect-docs).

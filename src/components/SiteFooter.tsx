@@ -5,7 +5,7 @@ export function SiteFooter() {
     <footer className="site-footer">
       <div className="bar">
         <span>© {new Date().getFullYear()} MediConnect</span>
-        <nav aria-label="Legal" style={{ display: 'flex', gap: '1rem' }}>
+        <nav aria-label="Legal" className="legal-links">
           <Link href="/privacy">Privacy notice</Link>
           <Link href="/terms">Terms of use</Link>
         </nav>

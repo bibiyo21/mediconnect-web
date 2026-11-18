@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "e2e": "playwright test",
+    "e2e:shots": "SHOTS=1 playwright test",
+    "e2e:report": "playwright show-report"
   },
   "dependencies": {
     "next": "16.4.6",
@@ -16,6 +19,9 @@
     "react-dom": "19.3.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@mediconnect/design-system": "link:../shared/packages/design-system",
+    "@playwright/test": "^1.65.1",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/react": "^16.3.3",
     "@types/node": "^20",

@@ -25,7 +25,7 @@ export default async function ClinicPage({ params }: { params: Params }) {
     return (<><h1>Clinic</h1><DirectoryUnavailableNotice /></>);
   }
   if (!clinic) notFound();
-  const closures = (clinic as { upcoming_closures?: { clinic_location_id: string | null; date: string; name: string; is_closed: boolean; special_opens_at: string | null; special_closes_at: string | null }[] }).upcoming_closures ?? [];
+  const closures = clinic.upcoming_closures;
 
   return (
     <>

@@ -7,6 +7,8 @@ import type { components } from '@mediconnect/api-types';
  * never trusted from here (Phase 4 revalidates against PostgreSQL).
  */
 export type PublicDoctor = components['schemas']['PublicDoctorResource'];
+export type PublicDoctorDetail = components['schemas']['PublicDoctorDetailResource'];
+export type PublicClinicDetail = components['schemas']['PublicClinicDetailResource'];
 export type PublicService = components['schemas']['DoctorServiceResource'];
 export type PublicClinic = components['schemas']['PublicClinicResource'];
 export type Page = { page: number; per_page: number; total: number; last_page: number };
@@ -39,7 +41,7 @@ export async function listDoctors(filters: { page?: number; city?: string; speci
   return { doctors: result?.data ?? [], meta: result?.meta };
 }
 
-export const getDoctor = async (id: string) => (await get<PublicDoctor>(`/doctors/${encodeURIComponent(id)}`))?.data ?? null;
+export const getDoctor = async (id: string) => (await get<PublicDoctorDetail>(`/doctors/${encodeURIComponent(id)}`))?.data ?? null;
 export const getDoctorServices = async (id: string) => (await get<PublicService[]>(`/doctors/${encodeURIComponent(id)}/services`))?.data ?? [];
 
 export async function listClinics(filters: { page?: number; city?: string }) {
@@ -47,7 +49,7 @@ export async function listClinics(filters: { page?: number; city?: string }) {
   return { clinics: result?.data ?? [], meta: result?.meta };
 }
 
-export const getClinic = async (id: string) => (await get<PublicClinic>(`/clinics/${encodeURIComponent(id)}`))?.data ?? null;
+export const getClinic = async (id: string) => (await get<PublicClinicDetail>(`/clinics/${encodeURIComponent(id)}`))?.data ?? null;
 export const getClinicDoctors = async (id: string) => (await get<ClinicDoctor[]>(`/clinics/${encodeURIComponent(id)}/doctors`))?.data ?? [];
 export const listSpecialties = async () => (await get<Specialty[]>('/specialties'))?.data ?? [];
 

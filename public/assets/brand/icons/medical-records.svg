@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-labelledby="t"><title id="t">Medical records</title>
+  <path d="M4 13a4 4 0 0 1 4-4h10l4 4h18a4 4 0 0 1 4 4v20a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z" fill="#14A38F" stroke="#0E3A66" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M4 19h40" stroke="#0E3A66" stroke-width="3"/>
+  <path d="M24 24v12M18 30h12" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+</svg>

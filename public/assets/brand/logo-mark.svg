@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-labelledby="t"><title id="t">MediConnect</title>
+  <defs><linearGradient id="g" x1="8" y1="10" x2="56" y2="54" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#1E6FD9"/><stop offset="1" stop-color="#14A38F"/></linearGradient></defs>
+  <path d="M32 54 C27 49 9 38 9 23.5 C9 15.5 15 10 22 10 C26.6 10 30 12.4 32 15.6 C34 12.4 37.4 10 42 10 C49 10 55 15.5 55 23.5 C55 38 37 49 32 54 Z" fill="none" stroke="url(#g)" stroke-width="7" stroke-linejoin="round"/>
+  <g transform="translate(38 37)"><rect x="-11.5" y="-4.5" width="23" height="9" rx="2.5" fill="#14A38F" stroke="#FFFFFF" stroke-width="2.5" paint-order="stroke"/><rect x="-4.5" y="-11.5" width="9" height="23" rx="2.5" fill="#14A38F" stroke="#FFFFFF" stroke-width="2.5" paint-order="stroke"/><rect x="-11.5" y="-4.5" width="23" height="9" rx="2.5" fill="#14A38F"/></g>
+</svg>

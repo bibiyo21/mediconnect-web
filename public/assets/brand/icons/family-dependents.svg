@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-labelledby="t"><title id="t">Family and dependents</title>
+  <circle cx="24" cy="13" r="6" fill="#14A38F" stroke="#0E3A66" stroke-width="2.5"/>
+  <circle cx="11" cy="19" r="4.5" fill="#14A38F" stroke="#0E3A66" stroke-width="2.5"/><circle cx="37" cy="19" r="4.5" fill="#14A38F" stroke="#0E3A66" stroke-width="2.5"/>
+  <path d="M3 40v-5a7 7 0 0 1 12-5M45 40v-5a7 7 0 0 0-12-5" fill="#14A38F" stroke="#0E3A66" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M13 42v-6a11 11 0 0 1 22 0v6z" fill="#14A38F" stroke="#0E3A66" stroke-width="2.5" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-labelledby="t"><title id="t">Book appointment</title>
+  <rect x="6" y="9" width="32" height="30" rx="5" fill="#FFFFFF" stroke="#0E3A66" stroke-width="3"/>
+  <path d="M6 14a5 5 0 0 1 5-5h22a5 5 0 0 1 5 5v5H6z" fill="#1E6FD9" stroke="#0E3A66" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M14 5v8M30 5v8" stroke="#0E3A66" stroke-width="3" stroke-linecap="round"/>
+  <g fill="#1E6FD9"><rect x="11" y="23" width="5" height="4" rx="1"/><rect x="19.5" y="23" width="5" height="4" rx="1"/><rect x="11" y="30" width="5" height="4" rx="1"/></g>
+  <circle cx="35" cy="34" r="9" fill="#14A38F" stroke="#FFFFFF" stroke-width="2.5"/>
+  <path d="M30.8 34.2l3 3 5.6-6" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

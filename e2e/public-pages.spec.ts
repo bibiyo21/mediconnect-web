@@ -1,7 +1,9 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
-const pages = ['/', '/privacy', '/terms'];
+const DOCTOR = '01a1ed01-0000-7000-8000-00000000d001';
+const CLINIC = '01a1ec01-0000-7000-8000-00000000c001';
+const pages = ['/', '/privacy', '/terms', '/doctors', `/doctors/${DOCTOR}`, '/clinics', `/clinics/${CLINIC}`];
 
 for (const path of pages) {
   test.describe(path, () => {
@@ -22,7 +24,7 @@ for (const path of pages) {
     test('screenshot', async ({ page }, info) => {
       test.skip(!process.env.SHOTS, 'set SHOTS=1 (pnpm e2e:shots) to capture');
       await page.goto(path);
-      await page.screenshot({ path: `test-results/shots/${info.project.name}${path === '/' ? '-home' : path.replace('/', '-')}.png`, fullPage: true });
+      await page.screenshot({ path: `test-results/shots/${info.project.name}${path === '/' ? '-home' : path.replace(/\/[0-9a-f-]{36}$/, '-detail').replace('/', '-')}.png`, fullPage: true });
     });
   });
 }
@@ -32,4 +34,26 @@ test('keyboard focus is visible on the first tab stop', async ({ page }) => {
   await page.keyboard.press('Tab');
   const outline = await page.evaluate(() => getComputedStyle(document.activeElement as Element).outlineStyle);
   expect(outline).not.toBe('none');
+});
+
+test('the doctor directory links a doctor to their profile, fees and clinic', async ({ page }) => {
+  await page.goto('/doctors');
+  await page.getByRole('link', { name: 'Dr. Ana Reyes' }).click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Dr. Ana Reyes' })).toBeVisible();
+  await expect(page.getByText('PRC licence checked by MediConnect')).toBeVisible();
+  await expect(page.getByText('₱650.00')).toBeVisible();
+  await expect(page.getByText('Booking through MediConnect is not available yet', { exact: false })).toBeVisible();
+  await page.getByRole('link', { name: 'Santos Family Clinic' }).click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Santos Family Clinic' })).toBeVisible();
+  await expect(page.getByText('08:00–12:00, 13:00–17:00')).toBeVisible();
+});
+
+test('filters with no match say so', async ({ page }) => {
+  await page.goto('/doctors?city=Nowhere');
+  await expect(page.getByText('No doctors match these filters yet.')).toBeVisible();
+});
+
+test('an unknown or invalid doctor id is a 404', async ({ page }) => {
+  expect((await page.goto('/doctors/not-a-uuid'))?.status()).toBe(404);
+  expect((await page.goto('/doctors/01a1ed01-0000-7000-8000-000000000999'))?.status()).toBe(404);
 });

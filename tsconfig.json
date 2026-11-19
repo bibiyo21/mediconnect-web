@@ -19,7 +19,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@mediconnect/api-types": ["../shared/packages/api-client/src/generated/schema.ts"]
     }
   },
   "include": [

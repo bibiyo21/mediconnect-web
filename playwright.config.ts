@@ -20,10 +20,15 @@ export default defineConfig({
     { name: 'tablet', use: { browserName: 'chromium', viewport: { width: 820, height: 1180 }, hasTouch: true } },
     { name: 'mobile', use: { browserName: 'chromium', viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true } },
   ],
-  webServer: {
-    command: 'pnpm dev',
-    url: `http://localhost:${PORT}`,
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-  },
+  // The site reads the directory on the server, so tests point it at a local mock API (e2e/mock-api.mjs).
+  webServer: [
+    { command: 'node e2e/mock-api.mjs', url: 'http://127.0.0.1:3999/health', reuseExistingServer: !process.env.CI, timeout: 30_000 },
+    {
+      command: 'pnpm dev',
+      url: `http://localhost:${PORT}`,
+      env: { MEDICONNECT_API_URL: 'http://127.0.0.1:3999/api/v1' },
+      reuseExistingServer: !process.env.CI,
+      timeout: 120_000,
+    },
+  ],
 });

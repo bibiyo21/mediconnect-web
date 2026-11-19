@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 /* eslint-disable @next/next/no-img-element -- static SVG icons and a pre-sized WebP with srcset; no optimiser needed */
 
 /**
@@ -32,9 +34,12 @@ export default function HomePage() {
             MediConnect brings independent doctors and clinics into one place. Soon you will be able to search, book, join a clinic queue or consult by video, and pay with GCash, Maya or a card.
           </p>
           <p className="notice" role="note">
-            MediConnect is in development. Doctor search and booking are not available yet.
+            MediConnect is in development. You can browse verified doctors and clinics; search and booking are not available yet.
           </p>
-          <a className="button" href="#features">See what is coming</a>
+          <div className="hero__actions">
+            <Link className="button" href="/doctors">Browse doctors</Link>
+            <a className="button button--secondary" href="#features">See what is coming</a>
+          </div>
         </div>
         <img
           className="hero__photo"

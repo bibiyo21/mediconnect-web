@@ -9,6 +9,10 @@ export function SiteHeader() {
           <img src="/assets/brand/logo-mark.svg" alt="" width={32} height={32} className="brand__mark" />
           <span>MediConnect</span>
         </Link>
+        <ul className="nav-links">
+          <li><Link href="/doctors">Doctors</Link></li>
+          <li><Link href="/clinics">Clinics</Link></li>
+        </ul>
       </nav>
     </header>
   );

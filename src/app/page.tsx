@@ -9,7 +9,7 @@ import Link from 'next/link';
  * (development-roadmap.md has the phases).
  */
 const FEATURES = [
-  { icon: 'find-a-doctor', title: 'Find a doctor', body: 'Search by specialty, location, HMO and available times.', phase: 'Planned' },
+  { icon: 'find-a-doctor', title: 'Search by HMO and time', body: 'Filter doctors by the HMO you use and by available dates and times.', phase: 'Planned' },
   { icon: 'book-appointment', title: 'Book an appointment', body: 'Reserve a clinic visit or an online consultation, with no double booking.', phase: 'Planned' },
   { icon: 'hospitals-clinics', title: 'Join a clinic queue', body: 'Register as a walk-in and follow your place in line.', phase: 'Planned' },
   { icon: 'video-consultation', title: 'Consult online', body: 'Private video rooms that fall back to audio on a weak connection.', phase: 'Planned' },
@@ -31,13 +31,13 @@ export default function HomePage() {
           <p className="eyebrow">For patients in the Philippines</p>
           <h1 id="hero-title">Find doctors and clinics near you, and see them in person or online</h1>
           <p className="lead">
-            MediConnect brings independent doctors and clinics into one place. Soon you will be able to search, book, join a clinic queue or consult by video, and pay with GCash, Maya or a card.
+            MediConnect brings independent doctors and clinics into one place. Search verified doctors today. Soon you will be able to book, join a clinic queue or consult by video, and pay with GCash, Maya or a card.
           </p>
           <p className="notice" role="note">
-            MediConnect is in development. You can browse verified doctors and clinics; search and booking are not available yet.
+            MediConnect is in development. You can search verified doctors and clinics; booking is not available yet.
           </p>
           <div className="hero__actions">
-            <Link className="button" href="/doctors">Browse doctors</Link>
+            <Link className="button" href="/search">Find a doctor</Link>
             <a className="button button--secondary" href="#features">See what is coming</a>
           </div>
         </div>

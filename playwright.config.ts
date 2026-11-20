@@ -26,7 +26,7 @@ export default defineConfig({
     {
       command: 'pnpm dev',
       url: `http://localhost:${PORT}`,
-      env: { MEDICONNECT_API_URL: 'http://127.0.0.1:3999/api/v1' },
+      env: { MEDICONNECT_API_URL: 'http://127.0.0.1:3999/api/v1', NEXT_PUBLIC_API_URL: 'http://127.0.0.1:3999/api/v1' },
       reuseExistingServer: !process.env.CI,
       timeout: 120_000,
     },

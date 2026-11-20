@@ -28,6 +28,30 @@ const clinic = {
 const page = (total) => ({ page: 1, per_page: 20, total, last_page: 1 });
 const ok = (data, meta = {}) => ({ success: true, data, meta, message: null });
 
+// Doctor search (3.6). Sentinel queries give the other states: nobody (empty), slow (degraded), broken (500), flood (429).
+const hit = (overrides = {}) => ({
+  doctor_id: DOCTOR, display_name: 'Dr. Ana Reyes', professional_title: 'MD', specialties: ['Pediatrics'], languages: ['en', 'fil'], years_experience: 8,
+  is_verified: true, offers_online: true, fee_from: fee(50000),
+  locations: [{ clinic_id: CLINIC, clinic_name: 'Santos Family Clinic', clinic_location_id: LOCATION, location_name: 'Makati branch', city: 'Makati', fee_min: 65000, fee_max: 65000, distance_km: null }],
+  ...overrides,
+});
+const second = hit({ doctor_id: '01a1ed01-0000-7000-8000-00000000d002', display_name: 'Dr. Ben Cruz', specialties: ['Cardiology'], offers_online: false, fee_from: fee(80000) });
+const searchMeta = (found, extra = {}) => ({ found, next_cursor: null, took_ms: 4, cache_hit: false, degraded: false, facets: {}, ...extra });
+function searchDoctors(url) {
+  const q = url.searchParams.get('q') ?? '';
+  if (q === 'nobody') return [200, ok([], searchMeta(0))];
+  if (q === 'slow') return [200, ok([hit()], searchMeta(1, { degraded: true }))];
+  if (q === 'broken') return [500, { success: false, message: 'Server error.', errors: {}, code: 'SERVER_ERROR' }];
+  if (q === 'flood') return [429, { success: false, message: 'Too many requests.', errors: {}, code: 'RATE_LIMITED' }];
+  if (url.searchParams.has('lat')) return [200, ok([hit({ locations: [{ ...hit().locations[0], distance_km: 1.2 }] })], searchMeta(1))];
+  if (url.searchParams.get('cursor') === 'page-2') return [200, ok([second], searchMeta(2))];
+  return [200, ok([hit()], searchMeta(2, { next_cursor: 'page-2' }))];
+}
+const suggestions = [
+  { specialty_id: 'sp1', id: 'sp1', name: 'Pediatrics', kind: 'SPECIALTY', parent_name: null, doctor_count: 1 },
+  { specialty_id: 'sp1', id: 'sub-neo', name: 'Neonatology', kind: 'SUBSPECIALTY', parent_name: 'Pediatrics', doctor_count: 1 },
+];
+
 const routes = [
   [/^\/api\/v1\/doctors$/, (url) => (url.searchParams.get('filter[city]') === 'Nowhere' ? ok([], page(0)) : ok([doctor], page(1)))],
   [new RegExp(`^/api/v1/doctors/${DOCTOR}$`), () => ok(doctor)],
@@ -36,13 +60,23 @@ const routes = [
   [new RegExp(`^/api/v1/clinics/${CLINIC}$`), () => ok(clinic)],
   [new RegExp(`^/api/v1/clinics/${CLINIC}/doctors$`), () => ok([{ id: DOCTOR, display_name: 'Dr. Ana Reyes', professional_title: 'MD', primary_specialty: 'Pediatrics', location_ids: [LOCATION] }])],
   [/^\/api\/v1\/specialties$/, () => ok([{ id: 'sp1', name: 'Pediatrics', slug: 'pediatrics' }])],
+  [/^\/api\/v1\/search\/doctors$/, searchDoctors],
+  [/^\/api\/v1\/search\/specialties$/, () => ok(suggestions, searchMeta(2))],
 ];
+
+// The browser calls search directly (the backend allows the site's origin the same way, config/cors.php).
+const cors = { 'Access-Control-Allow-Origin': 'http://localhost:3000', 'Access-Control-Allow-Headers': 'Accept, Content-Type', Vary: 'Origin' };
 
 createServer((req, res) => {
   const url = new URL(req.url ?? '/', `http://localhost:${PORT}`);
   const match = routes.find(([pattern]) => pattern.test(url.pathname));
-  const status = match ? 200 : url.pathname === '/health' ? 200 : 404;
-  const body = match ? match[1](url) : { success: false, message: 'Not found.', errors: {}, code: 'NOT_FOUND' };
-  res.writeHead(status, { 'Content-Type': 'application/json' });
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204, cors);
+    res.end();
+    return;
+  }
+  const answer = match ? match[1](url) : null;
+  const [status, body] = Array.isArray(answer) ? answer : [match || url.pathname === '/health' ? 200 : 404, answer ?? { success: false, message: 'Not found.', errors: {}, code: 'NOT_FOUND' }];
+  res.writeHead(status, { 'Content-Type': 'application/json', ...cors });
   res.end(JSON.stringify(body));
 }).listen(PORT, '127.0.0.1');

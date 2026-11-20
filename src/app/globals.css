@@ -76,3 +76,20 @@ main { max-width: var(--size-content-max); margin: 0 auto; padding: var(--space-
 .plain-list a { min-height: var(--size-touch-target); display: inline-flex; align-items: center; }
 @media (min-width: 1024px) { .directory-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 599px) { .facts { gap: var(--space-2) var(--space-4); } }
+
+/* Doctor search (3.6) */
+.search-form { margin: var(--space-6) 0 var(--space-4); display: flex; flex-direction: column; gap: var(--space-4); }
+.search-form__query { display: flex; flex-direction: column; gap: var(--space-1); }
+.search-form__query > label { font-weight: var(--font-weight-label); font-size: var(--font-size-label); }
+.search-form__query p { margin: 0; }
+.search-form__filters { margin: 0; }
+.combobox { position: relative; }
+.combobox input { width: 100%; min-height: var(--size-control); padding: 0 var(--space-3); border: var(--size-hairline) solid var(--color-border-strong); border-radius: var(--radius-md); background: var(--color-surface); color: var(--color-text-primary); font: inherit; }
+.combobox__list { position: absolute; z-index: var(--z-dropdown); inset-inline: 0; top: calc(100% + var(--space-1)); margin: 0; padding: var(--space-1); list-style: none; background: var(--color-surface); border: var(--size-hairline) solid var(--color-border-strong); border-radius: var(--radius-md); box-shadow: var(--shadow-overlay); }
+.combobox__list[hidden] { display: none; }
+.combobox__option { display: flex; justify-content: space-between; gap: var(--space-3); align-items: center; min-height: var(--size-touch-target); padding: 0 var(--space-3); border-radius: var(--radius-sm); cursor: pointer; }
+.combobox__option[aria-selected='true'], .combobox__option:hover { background: var(--color-primary-soft); }
+.search-chip, .near-me { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); margin: 0 0 var(--space-4); }
+.near-me p { margin: 0; }
+.search-status { min-height: var(--line-height-body); margin: var(--space-4) 0 0; color: var(--color-text-secondary); }
+.button:disabled, .button[aria-disabled='true'] { opacity: 0.6; cursor: progress; }

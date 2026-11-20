@@ -5,7 +5,7 @@ import PrivacyPage from '@/app/privacy/page';
 import { securityHeaders } from '../next.config';
 
 describe('public site shell', () => {
-  it('states plainly that search and booking are not available yet', () => {
+  it('states plainly that booking is not available yet', () => {
     render(<HomePage />);
     expect(screen.getByRole('heading', { level: 1 })).toBeTruthy();
     expect(screen.getByRole('note').textContent).toMatch(/not available yet/);

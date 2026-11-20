@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 
 const DOCTOR = '01a1ed01-0000-7000-8000-00000000d001';
 const CLINIC = '01a1ec01-0000-7000-8000-00000000c001';
-const pages = ['/', '/privacy', '/terms', '/doctors', `/doctors/${DOCTOR}`, '/clinics', `/clinics/${CLINIC}`];
+const pages = ['/', '/privacy', '/terms', '/search', '/doctors', `/doctors/${DOCTOR}`, '/clinics', `/clinics/${CLINIC}`];
 
 for (const path of pages) {
   test.describe(path, () => {

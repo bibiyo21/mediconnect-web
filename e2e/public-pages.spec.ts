@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 
 const DOCTOR = '01a1ed01-0000-7000-8000-00000000d001';
 const CLINIC = '01a1ec01-0000-7000-8000-00000000c001';
-const pages = ['/', '/privacy', '/terms', '/search', '/doctors', `/doctors/${DOCTOR}`, '/clinics', `/clinics/${CLINIC}`];
+const pages = ['/', '/privacy', '/terms', '/search', `/doctors/${DOCTOR}`, '/clinics', `/clinics/${CLINIC}`];
 
 for (const path of pages) {
   test.describe(path, () => {
@@ -36,8 +36,8 @@ test('keyboard focus is visible on the first tab stop', async ({ page }) => {
   expect(outline).not.toBe('none');
 });
 
-test('the doctor directory links a doctor to their profile, fees and clinic', async ({ page }) => {
-  await page.goto('/doctors');
+test('search links a doctor to their profile, fees and clinic', async ({ page }) => {
+  await page.goto('/search');
   await page.getByRole('link', { name: 'Dr. Ana Reyes' }).click();
   await expect(page.getByRole('heading', { level: 1, name: 'Dr. Ana Reyes' })).toBeVisible();
   await expect(page.getByText('PRC licence checked by MediConnect')).toBeVisible();
@@ -48,9 +48,10 @@ test('the doctor directory links a doctor to their profile, fees and clinic', as
   await expect(page.getByText('08:00–12:00, 13:00–17:00')).toBeVisible();
 });
 
-test('filters with no match say so', async ({ page }) => {
-  await page.goto('/doctors?city=Nowhere');
-  await expect(page.getByText('No doctors match these filters yet.')).toBeVisible();
+test('the old doctor list redirects to search, keeping its filters', async ({ page }) => {
+  await page.goto('/doctors?city=Makati&page=2');
+  await expect(page).toHaveURL(/\/search\?city=Makati$/);
+  await expect(page.getByRole('heading', { level: 1, name: 'Find a doctor' })).toBeVisible();
 });
 
 test('an unknown or invalid doctor id is a 404', async ({ page }) => {

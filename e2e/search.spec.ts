@@ -72,6 +72,31 @@ test('a newer search aborts the one still in flight', async ({ page }) => {
   await expect(page.getByText('No doctors match. Try a different word, or remove a filter.')).toBeVisible();
 });
 
+test('clearing the box while a search is in flight returns to the full list, not the late answer', async ({ page }) => {
+  await page.goto('/search');
+  await expect(page.getByRole('status')).toHaveText('2 doctors found');
+  let release: () => void = () => {};
+  const held = new Promise<void>((r) => (release = r));
+  await page.route(/\/search\/doctors\?q=nobody/, async (route) => {
+    await held;
+    await route.continue().catch(() => {});
+  });
+  const aborted: string[] = [];
+  page.on('requestfailed', (r) => {
+    if (r.url().includes('q=nobody')) aborted.push(r.failure()?.errorText ?? '');
+  });
+  const field = page.getByLabel('Search', { exact: true });
+  await field.fill('nobody');
+  await page.waitForRequest((r) => r.url().includes('q=nobody'));
+  await field.fill('');
+  await expect.poll(() => aborted.length).toBe(1); // aborted as soon as the box was cleared
+  release();
+  await page.waitForTimeout(500);
+  await expect(page.getByRole('status')).toHaveText('2 doctors found');
+  await expect(page.getByText('No doctors match', { exact: false })).toHaveCount(0);
+  await expect(page).toHaveURL(/\/search$/);
+});
+
 test('suggests specialties as a combobox, by keyboard, and filters by the one chosen', async ({ page }) => {
   await page.goto('/search');
   await expect(page.getByRole('status')).toHaveText('2 doctors found');

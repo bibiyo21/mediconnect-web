@@ -88,10 +88,22 @@ export function DoctorSearch({ apiUrl, specialties, initialFilters, initialPage,
   const suggests = useRef(latestOnly());
   const answered = result.key === requestKey;
 
+  // The URL follows the filters (never the location), only when they change.
+  const lastUrl = useRef(pageUrl(initialFilters));
   useEffect(() => {
-    // Already answered: the server's first page, or a search that just finished.
-    if (answered) return;
-    window.history.replaceState(window.history.state, '', pageUrl(filters));
+    const next = pageUrl(filters);
+    if (next === lastUrl.current) return;
+    lastUrl.current = next;
+    window.history.replaceState(window.history.state, '', next);
+  }, [filters]);
+
+  useEffect(() => {
+    // Already answered (the server's first page, or a search that finished): any request still
+    // in flight is for filters the patient has left, so abort it rather than let it land late.
+    if (answered) {
+      searches.current.cancel();
+      return;
+    }
     searches.current
       .run((signal) => searchDoctors(apiUrl, filters, { coords, signal }))
       .then((next) => setResult({ key: requestKey, page: next, doctors: next.doctors, error: null }))

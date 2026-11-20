@@ -11,7 +11,6 @@ export function SiteHeader() {
         </Link>
         <ul className="nav-links">
           <li><Link href="/search">Find a doctor</Link></li>
-          <li><Link href="/doctors">Doctors</Link></li>
           <li><Link href="/clinics">Clinics</Link></li>
         </ul>
       </nav>

@@ -30,7 +30,7 @@ export default async function DoctorPage({ params }: { params: Params }) {
   const online = services.filter((s) => s.consultation_type === 'ONLINE');
   return (
     <>
-      <p><Link href="/doctors">← All doctors</Link></p>
+      <p><Link href="/search">← Find a doctor</Link></p>
       <h1>{doctor.display_name}</h1>
       <p className="lead">{[doctor.professional_title, doctor.primary_specialty].filter(Boolean).join(' · ')}</p>
       {doctor.licence_verified ? <p className="badge">PRC licence checked by MediConnect</p> : null}

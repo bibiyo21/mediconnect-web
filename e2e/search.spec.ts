@@ -139,14 +139,28 @@ test('says so when search is degraded, fails, or is rate limited', async ({ page
   await expect(page.getByRole('status')).toHaveText('2 doctors found');
 });
 
-// The site's Permissions-Policy is `geolocation=()` (next.config.ts), so browsers that honour it refuse
-// the location. Until that header allows `self`, "near me" must fail honestly and send no coordinates.
-// The success path (rounding, URL, turning it off) is covered in tests/search.test.tsx.
-test('"near me" under the current Permissions-Policy falls back to the city filter without sending a location', async ({ page, context }) => {
+test('"near me" is opt-in, keeps the location out of the URL, and can be turned off', async ({ page, context }) => {
   await context.grantPermissions(['geolocation']);
   await context.setGeolocation({ latitude: 14.55471, longitude: 121.02441 });
   const response = await page.goto('/search');
-  expect(response?.headers()['permissions-policy']).toContain('geolocation=()');
+  expect(response?.headers()['permissions-policy']).toContain('geolocation=(self)');
+  await expect(page.getByRole('status')).toHaveText('2 doctors found');
+  const seen = searches(page);
+  expect(seen).toEqual([]); // nothing asked for or sent until the patient chooses
+  await page.getByRole('button', { name: 'Doctors near me' }).click();
+  await expect(page.getByText('(1.2 km away)', { exact: false })).toBeVisible();
+  const near = seen.at(-1)!;
+  expect([near.searchParams.get('lat'), near.searchParams.get('lng'), near.searchParams.get('radius_km'), near.searchParams.get('sort')]).toEqual(['14.555', '121.024', '25', 'distance']);
+  expect(page.url()).not.toContain('14.5');
+  await expect(page.getByText('is not saved', { exact: false })).toBeVisible();
+  expect(await axe(page)).toEqual([]);
+  await page.getByRole('button', { name: 'Stop using my location' }).click();
+  await expect(page.getByRole('button', { name: 'Doctors near me' })).toBeVisible();
+  await expect.poll(() => seen.at(-1)!.searchParams.has('lat')).toBe(false);
+});
+
+test('"near me" refused by the patient falls back to the city filter without sending a location', async ({ page }) => {
+  await page.goto('/search'); // no permission granted in this context
   await expect(page.getByRole('status')).toHaveText('2 doctors found');
   const seen = searches(page);
   await page.getByRole('button', { name: 'Doctors near me' }).click();

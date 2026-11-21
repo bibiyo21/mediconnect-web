@@ -20,4 +20,9 @@ describe('public site shell', () => {
     const keys = securityHeaders.map((h) => h.key);
     expect(keys).toEqual(expect.arrayContaining(['Strict-Transport-Security', 'X-Frame-Options', 'X-Content-Type-Options', 'Referrer-Policy']));
   });
+
+  it('lets only this site ask for location ("near me", D-43); camera and microphone stay off', () => {
+    const policy = securityHeaders.find((h) => h.key === 'Permissions-Policy')?.value;
+    expect(policy).toBe('camera=(), microphone=(), geolocation=(self)');
+  });
 });
